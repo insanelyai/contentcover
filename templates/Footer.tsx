@@ -3,8 +3,8 @@ import React from "react";
 export default function Footer() {
   return (
     <section className='overflow-hidden bg-purple-50 backdrop-blur-xl flex flex-col items-start justify-start pt-5 pb-10'>
-      <div className='max-w-screen-lg w-full mx-auto grid grid-cols-2 md:grid-flow-col-3 lg:grid-cols-4 gap-16 pt-5'>
-        <div className='flex flex-col items-center justify-center text-lg font-semibold gap-2'>
+      <div className='max-w-screen-lg w-full mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-16 pt-5 px-10'>
+        <div className='flex flex-col items-start lg:items-center justify-center  text-lg font-semibold gap-2'>
           <Logo width='90' height='89' />
           ContentCover
         </div>
