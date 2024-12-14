@@ -13,7 +13,7 @@ export default function CTA() {
             Join thousands of content creators who are already using ContentCover
           </p>
         </div>
-        <Button size='lg'>Get Started Now</Button>
+        <Button size='lg' className="bg-purple-500 hover:bg-purple-400">Get Started Now</Button>
       </div>
     </section>
   );

@@ -14,9 +14,10 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { SignInButton, UserButton } from "@clerk/nextjs";
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
-import React from "react";
+import { auth } from "@clerk/nextjs/server";
 
 const links = [
   { label: "Features", href: "/" },
@@ -25,16 +26,18 @@ const links = [
   { label: "Contact", href: "/contact" },
 ];
 
-export default function Navbar() {
+export default async function Navbar() {
+  const { userId } = await auth();
+
   return (
     <header className='w-full h-14 sticky top-0 z-10 backdrop-blur-lg bg-background/80 lg:border border-border flex shrink-0 items-center'>
-      <MobileNavbar />
-      <DesktopNavbar />
+      <MobileNavbar userId={userId} />
+      <DesktopNavbar userId={userId} />
     </header>
   );
 }
 
-export function DesktopNavbar() {
+export function DesktopNavbar({ userId }: { userId: string | null }) {
   return (
     <NavigationMenu className='max-w-screen-lg px-3 lg:px-6 xl:px-0 items-center justify-between mx-auto hidden lg:flex'>
       <NavigationMenuList className='basis-1/3'>
@@ -52,7 +55,7 @@ export function DesktopNavbar() {
           return (
             <NavigationMenuItem key={index}>
               <Link href={link.href} legacyBehavior passHref>
-                <NavigationMenuLink className='px-4 font-medium'>
+                <NavigationMenuLink className='px-4 font-medium hover:text-purple-400 transition-colors duration-75'>
                   {link.label}
                 </NavigationMenuLink>
               </Link>
@@ -65,14 +68,22 @@ export function DesktopNavbar() {
         {/* <Button variant='outline' size='icon'>
           <SettingsIcon />
         </Button> */}
-        <ReplicateDilog />
-        <Button className="bg-purple-500 hover:bg-purple-400">Sign in</Button>
+        <ReplicateDilog userId={userId} />
+        {userId ? (
+          <UserButton />
+        ) : (
+          <SignInButton>
+            <Button className='bg-purple-500 hover:bg-purple-400'>
+              Sign in
+            </Button>
+          </SignInButton>
+        )}
       </NavigationMenuList>
     </NavigationMenu>
   );
 }
 
-export function MobileNavbar() {
+export function MobileNavbar({ userId }: { userId: string | null }) {
   return (
     <Sheet>
       <SheetTrigger asChild className='mx-2 block lg:hidden'>
@@ -95,7 +106,11 @@ export function MobileNavbar() {
           <div className='grid text-lg gap-1 space-y-4 my-7'>
             {links.map((link, index) => {
               return (
-                <Link key={index} href={link.href}>
+                <Link
+                  key={index}
+                  href={link.href}
+                  className='hover:text-purple-400'
+                >
                   {link.label}
                 </Link>
               );
@@ -108,10 +123,17 @@ export function MobileNavbar() {
           {/* <Button variant='outline' size='lg' className='w-full'>
             Add Replicate API
           </Button> */}
-          <ReplicateDilog />
-          <Button size='lg' className='w-full bg-purple-500 hover:bg-purple-400'>
-            Sign in
-          </Button>
+          <ReplicateDilog userId={userId} />
+          {userId ? (
+            <UserButton />
+          ) : (
+            <Button
+              size='lg'
+              className='w-full bg-purple-500 hover:bg-purple-400'
+            >
+              Sign in
+            </Button>
+          )}
         </div>
       </SheetContent>
     </Sheet>
